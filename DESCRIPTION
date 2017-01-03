@@ -1,0 +1,23 @@
+Package: chromploid
+Title: Chromosome Number and Ploidy Evolution Models
+Version: 0.0.1.0000
+Authors@R: person("Rosana", "Zenil-Ferguson", email = "roszenil@gmail.com", role = c("aut", "cre"))
+Description: Likelihood calculation of models for chromosome number evolution
+    associated to binary character and ploidy evolution models. Models included are
+    BiChroM, BiChroM linear, PloidEvol, and ChromEvolM3.
+Depends:
+    R (>= 3.2.4)
+License: GPL-3
+Encoding: UTF-8
+LazyData: true
+Imports:
+    ape,
+    expm,
+    geiger,
+    MASS
+Suggests:
+    phytools,
+    knitr,
+    rmarkdown
+RoxygenNote: 5.0.1
+VignetteBuilder: knitr
