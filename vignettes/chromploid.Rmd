@@ -132,7 +132,7 @@ x.0<- log(c(0.12, 0.001, 0.25, 0.002,0.010, 0.04,0.02, 1.792317852, 1.57e-14))
 results.reduced<-rep(0,10) # Vector useful to save optimization results
 my.options<-list("algorithm"= "NLOPT_LN_SBPLX","ftol_rel"=1e-08,"print_level"=1,"maxtime"=170000000, "maxeval"=1000) 
 # Options used in nloptr, for more information ?nloptr. This is a subplex algorithm, with high tolerance to fine a very precise optimum.
-mle.reduced<-nloptr(x0=x.0,eval_f=negloglikelihood,opts=my.options, phy=mytree, tip.values=mysample,pi.0=NULL,Q.FUN=Q_reducedbichrom, Q.ARGS = list(size=50, equal.param=c("rho0","rho1"),location.par=5))
+mle.reduced<-nloptr(x0=x.0,eval_f=chromploid_nllike,opts=my.options, phy=mytree, tip.values=mysample,pi.0=NULL,Q.FUN=Q_reducedbichrom, Q.ARGS = list(size=50, equal.param=c("rho0","rho1"),location.par=5))
 #Q.ARGS is a list that has all the arguments included in Q_reducedbichrom
 #Type ?Q_reducedbichrom to see a longer explanation of each argument
 #size= maximum number of haploid chromosome numbers to consider in your sample, 
@@ -171,7 +171,7 @@ profile.values<-rep(0,long) # Vector useful to save optimization results
 my.options<-list("algorithm"= "NLOPT_LN_SBPLX","ftol_rel"=1e-08,"print_level"=1,"maxtime"=170000000, "maxeval"=1000)
 # Options used in nloptr, for more information ?nloptr. This is a subplex algorithm, with high tolerance to fine a very precise optimum.
 for(i in 1:long){
-  mle.profilerho0<-nloptr(x0=x.0,eval_f=negloglikelihood,opts=my.options, phy=mytree, tip.values=mysample,pi.0=NULL,Q.FUN=Q_unibichrom, Q.ARGS = list(log.theta0=logrho0.values[i],size=50, param.name="rho0"))
+  mle.profilerho0<-nloptr(x0=x.0,eval_f=chromploid_nllike,opts=my.options, phy=mytree, tip.values=mysample,pi.0=NULL,Q.FUN=Q_unibichrom, Q.ARGS = list(log.theta0=logrho0.values[i],size=50, param.name="rho0"))
 #Q.ARGS is a list that has all the arguments included in Q_unibichrom
 #Type ?Q_unibichrom to see a longer explanation of each argument
   print(mle.profilerho0)
