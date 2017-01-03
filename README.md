@@ -1,5 +1,5 @@
 ## Overview of Chromploid
-# Rosana Zenil-Ferguson. Updated Jan 3rd, 2017
+### Rosana Zenil-Ferguson. Updated Jan 3rd, 2017
 Chromploid is a package that calculates the negative log-likelihood function for evolution rates of chromosome number or ploidy change models in phylogenetic trees. Currently, chromploid includes three different models of chromosome number or ploidy evolution: BiChroM, PloidEvol, and ChromEvol M3(beta version). Users can choose among these three models but if interested Chromploid package can be extended to accomodate custom chromosome number or ploidy change models.
 
 About the models included
