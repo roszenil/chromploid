@@ -20,4 +20,3 @@ For BiChroM simulation sim.char(phy=mytree, par=Q_bichrom, nsim=1, model="discre
 \description{
 Simulates a a sample of chromosome number or ploidy change for models with large sparse matrices
 }
-

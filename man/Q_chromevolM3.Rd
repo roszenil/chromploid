@@ -20,4 +20,3 @@ Calculates Q-matrix for chromevol M3 model (beta version)
 \details{
 Q_chomevolM3 determines the Q-matrix for a model of chromosome number change with duplications, dysploidy, and  demiploidy.
 }
-

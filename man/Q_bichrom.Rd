@@ -20,4 +20,3 @@ Calculates Q-matrix for BiChroM model
 \details{
 Q_bichrom determines the Q-matrix for a model of chromosome number change associated with a binary state with traits coded as 0 or 1.
 }
-

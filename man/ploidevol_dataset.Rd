@@ -23,4 +23,3 @@ This function cleans and organizes a vector of ploidies assuming ploidy values r
 \seealso{
 \code{\link{negloglikelihood}}
 }
-

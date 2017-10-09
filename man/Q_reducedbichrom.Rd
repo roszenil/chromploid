@@ -22,4 +22,3 @@ Calculates a Q matrix for reduced BiChroM model
 \details{
 This function assumes that two parameter values are equal. This is useful for calculating likelihood ratio tests in BiChrom. By default the two parameters assumed equal are "rho0"="rho1" but user can specify which two parameters are the same
 }
-

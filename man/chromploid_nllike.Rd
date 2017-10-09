@@ -28,4 +28,3 @@ Calculates the negative log-likelihood of a chromosome or ploidy model
 \author{
 Rosana Zenil-Ferguson
 }
-

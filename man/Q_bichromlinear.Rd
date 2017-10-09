@@ -22,4 +22,3 @@ Q_bichromlinear determines the Q-matrix for a model of chromosome number change 
 
 Note: This is a beta version, the linear function for binary trait change rate from state 0 to 1 is  kappa0+ (chromosome number)*q01
 }
-

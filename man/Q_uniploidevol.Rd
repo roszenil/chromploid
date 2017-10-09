@@ -19,4 +19,3 @@ Q a sparse matrix of size 11x11
 \description{
 Calculates Q-matrix for univariate profile likelihoods for Ploidevol model
 }
-

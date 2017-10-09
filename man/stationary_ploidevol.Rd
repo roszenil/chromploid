@@ -15,10 +15,9 @@ A probability vector of size 11 indicating probabilities of the root being ploid
 \description{
 Calculates stationary distribution for root under Ploidevol model
 }
-\author{
-Rosana Zenil-Ferguson
-}
 \seealso{
 \code{\link{negloglikelihood}}, \code{\link{Q_ploidevol}}
 }
-
+\author{
+Rosana Zenil-Ferguson
+}

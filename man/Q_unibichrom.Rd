@@ -21,4 +21,3 @@ Q a sparse matrix of size 2*(size+1)
 \description{
 Calculates Q-matrix for univariate profile likelihoods from BiChroM model
 }
-

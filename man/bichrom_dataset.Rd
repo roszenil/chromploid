@@ -24,10 +24,9 @@ Cleans and organizes dataset for BiChroM analyses
 \details{
 bichrom_dataset organizes chromosome numbers in three ways. First, it transforms chromosome numbers into haploid chromosome numbers, and for chromosome numbers that are not divisible by 2, floor value of chromosome number divided by 2 is taken. Second, changes haploid values larger than specified size to value size+1. And third, for taxa that are in binary state 1, redefines haploid chromosome numbers from size+2 to 2*(size+1). That is if a taxon has 6 chromosomes, state.1=1, and size=50 bichrom_dataset function will recode this individual with value 54 (3 haploid chromosome number, state 0 ranges from 1 to 51, and state 1 ranges from 52 to 102) for analyses with Q_bichrom
 }
-\author{
-Rosana Zenil-Ferguson
-}
 \seealso{
 Q_bichrom
 }
-
+\author{
+Rosana Zenil-Ferguson
+}

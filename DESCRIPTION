@@ -14,10 +14,12 @@ Imports:
     ape,
     expm,
     geiger,
-    MASS
+    MASS,
+    nloptr
 Suggests:
     phytools,
     knitr,
-    rmarkdown
-RoxygenNote: 5.0.1
+    rmarkdown,
+    diversitree
+RoxygenNote: 6.0.1
 VignetteBuilder: knitr

@@ -18,4 +18,3 @@ Calculates Q-matrix for Ploidevol  model
 \details{
 This function specifies a Q-matrix of size 11x11 where states are ploidy values from 2x to 12x
 }
-
