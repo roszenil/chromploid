@@ -22,7 +22,7 @@ You'll need package `devtools`. Chromploid is easily installed from github
 library("devtools")
 devtools::install_github("roszenil/chromploid")
 library("chromploid")
-library("geiger")
+library("geiger") 
 library("nloptr")
 #chromploid depends on geiger and nloptr so don't forget to load the packages
 ```
@@ -64,8 +64,8 @@ Each of the functions listed below creates a Q-matrix, a matrix that defines the
 -   Calculate BiChroM Q-matrix All parameters in BiChroM are used in log scale because numerical calculations are easier than in original scale.
 
 ``` r
-log.params <- log(c(0.12, 0.001, 0.25, 0.002, 0.036, 0.006, 0.04,
-0.02, 1.792317852, 1.57e-14))
+log.params <- log(c(0.12, 0.001, 0.25, 0.002, 0.036, 0.006, 0.04, 
+    0.02, 1.792317852, 1.57e-14))
 N <- 50
 mymatrix <- Q_bichrom(log.theta = log.params, size = N)
 ```
@@ -73,7 +73,7 @@ mymatrix <- Q_bichrom(log.theta = log.params, size = N)
 -   Simulate a tree with 500 taxa and BiChroM values Assuming that the root of the tree has a value 56 means that the root is has 5 haploid chromosomes and its binary type is 1.
 
 ``` r
-mytree<- sim.bdtree(b=0.055, stop="taxa", n=500, seed=1)
+mytree<- sim.bdtree(b=0.055, stop="taxa", n=500, seed=1) 
 # Seed was fixed to obtain always the same tree for this tutorial
 plot(mytree,type="fan",cex=0.2, no.margin=TRUE)
 ```
@@ -88,12 +88,12 @@ mysample<- chromploid_sim.char(phy=mytree, par=mymatrix,model="discrete", root=5
 -   Calculate the likelihood of the tree, assuming that the root has a uniform distribution for chromosome number and binary state `pi.0=NULL` (other options for the root are available, like Maddison and Fitzjohn (2009)). The value of the negative log-likelihood `nllike` in this example is 943.9293, since we fixed the random seed, and it is calculated as follows.
 
 ``` r
-nllike <- chromploid_nllike(log.par = log.params, phy = mytree,
-tip.values = mysample, pi.0 = NULL, Q.FUN = Q_bichrom, Q.ARGS = list(size = 50))
+nllike <- chromploid_nllike(log.par = log.params, phy = mytree, 
+    tip.values = mysample, pi.0 = NULL, Q.FUN = Q_bichrom, Q.ARGS = list(size = 50))
 nllike
 ```
 
-## [1] 943.9293
+    ## [1] 943.9293
 
 If you have the following error appearing
 
@@ -117,15 +117,15 @@ head(mysample)
 # x.0 close to the maximum it can take up to 96 hrs.
 
 library(nloptr)
-x.0 <- log(c(0.12, 0.001, 0.25, 0.002, 0.036, 0.006, 0.04, 0.02,
-1.792317852, 1.57e-14))
+x.0 <- log(c(0.12, 0.001, 0.25, 0.002, 0.036, 0.006, 0.04, 0.02, 
+    1.792317852, 1.57e-14))
 # value where the optimization algorithm is going to start. A
 # vector of 10 values for the parameters in log scale
 
 model.args <- list(size = 50)
-optimization.bichrom <- chromploid_optim(phy.tree = mytree, tip.values = mysample,
-model = "bichrom", model.args = model.args, starting.val = x.0,
-root.dist = NULL)
+optimization.bichrom <- chromploid_optim(phy.tree = mytree, tip.values = mysample, 
+    model = "bichrom", model.args = model.args, starting.val = x.0, 
+    root.dist = NULL)
 
 print(optimization.bichrom)
 ```
@@ -135,14 +135,14 @@ The vector `optimization.bicrhom` contains in the first 10 entries maximum likel
 1.  Likelihood Ratio Test To calculate the likelihood of the reduced model needed for likelihood ratio tests you can use the function `chromploid_nllike` with Q-matrix `Q_reducedbichrom` or use the wrapper optimization function `chromploid_optim`. The example here tests if the rates associated with chromosome doubling under the different values of the binary trait are equal that is *H*<sub>0</sub> : *ρ* = *ρ*<sub>0</sub> = *ρ*<sub>1</sub>
 
 ``` r
-x.0 <- log(c(0.12, 0.001, 0.25, 0.002, 0.01, 0.04, 0.02, 1.792317852,
-1.57e-14))
+x.0 <- log(c(0.12, 0.001, 0.25, 0.002, 0.01, 0.04, 0.02, 1.792317852, 
+    1.57e-14))
 # Value where the optimization algorithm is going to start. A
 # vector of 9 values for the parameters in log scale. The
 # value of the hypothesis here is rho=0.010
 
-model.args = list(size = 50, equal.param = c("rho0", "rho1"),
-location.par = 5)
+model.args = list(size = 50, equal.param = c("rho0", "rho1"), 
+    location.par = 5)
 # Q.ARGS is a list that has all the arguments included in
 # Q_reducedbichrom that are not the parameters size= maximum
 # number of haploid chromosome numbers to consider in your
@@ -150,9 +150,9 @@ location.par = 5)
 # the hypothesis H0, location.par is the position in the
 # vector where rho value appears
 
-optimization.reducedbichrom <- chromploid_optim(phy.tree = mytree,
-tip.values = mysample, model = "reducedbichrom", model.args = model.args,
-starting.val = x.0, root.dist = NULL)
+optimization.reducedbichrom <- chromploid_optim(phy.tree = mytree, 
+    tip.values = mysample, model = "reducedbichrom", model.args = model.args, 
+    starting.val = x.0, root.dist = NULL)
 ```
 
 The vector `optimization.reducedbicrhom` contains in the first 9 entries maximum likelihood estimates of parameters (*λ*<sub>0</sub>, *λ*<sub>1</sub>, *μ*<sub>0</sub>, *μ*<sub>1</sub>, *ρ*, *q*<sub>01</sub>, *q*<sub>10</sub>, *ϵ*<sub>0</sub>, *ϵ*<sub>1</sub>). Then the negative log likelihood value at the MLE, and finally the status of the convergence to the optimum inherited from package nloptr.
@@ -168,9 +168,9 @@ alpha <- 0.05
 D = 2 * (neglog.red - neglog.full)
 p.value <- pchisq(D, lower.tail = FALSE, df = 1)
 if (p.value > 0.05) {
-reject <- 0
+    reject <- 0
 } else {
-reject <- 1
+    reject <- 1
 }
 ```
 
@@ -186,31 +186,31 @@ logrho0.values <- log(seq(0.02, 0.04, 0.005))
 # 0.035, 0.04 (in log scale). True value is around 0.36 so
 # values surrounding the true value are interesting
 long <- length(logrho0.values)
-x.0 <- log(c(0.12, 0.001, 0.25, 0.002, 0.006, 0.04, 0.02, 1.792317852,
-1.57e-14))
+x.0 <- log(c(0.12, 0.001, 0.25, 0.002, 0.006, 0.04, 0.02, 1.792317852, 
+    1.57e-14))
 # value where the optimization algorithm is going to start. A
 # vector of 9 values for the nuisance parameters in log scale
 # (everything except rho0)
 profile.values <- rep(0, long)  # Vector useful to save optimization results
-my.options <- list(algorithm = "NLOPT_LN_SBPLX", ftol_rel = 1e-08,
-print_level = 1, maxtime = 1.7e+08, maxeval = 1000)
+my.options <- list(algorithm = "NLOPT_LN_SBPLX", ftol_rel = 1e-08, 
+    print_level = 1, maxtime = 1.7e+08, maxeval = 1000)
 # Options used in nloptr, for more information ?nloptr. This
 # is a subplex algorithm, with high tolerance to fine a very
 # precise optimum.
 for (i in 1:long) {
-mle.profilerho0 <- nloptr(x0 = x.0, eval_f = chromploid_nllike,
-opts = my.options, phy = mytree, tip.values = mysample,
-pi.0 = NULL, Q.FUN = Q_unibichrom, Q.ARGS = list(log.theta0 = logrho0.values[i],
-size = 50, param.name = "rho0"))
-# Q.ARGS is a list that has all the arguments included in
-# Q_unibichrom Type ?Q_unibichrom to see a longer explanation
-# of each argument
-print(mle.profilerho0)
-profile.values[i] <- mle.profilerho0$objective
+    mle.profilerho0 <- nloptr(x0 = x.0, eval_f = chromploid_nllike, 
+        opts = my.options, phy = mytree, tip.values = mysample, 
+        pi.0 = NULL, Q.FUN = Q_unibichrom, Q.ARGS = list(log.theta0 = logrho0.values[i], 
+            size = 50, param.name = "rho0"))
+    # Q.ARGS is a list that has all the arguments included in
+    # Q_unibichrom Type ?Q_unibichrom to see a longer explanation
+    # of each argument
+    print(mle.profilerho0)
+    profile.values[i] <- mle.profilerho0$objective
 }
 
-plot(exp(logrho0.values), profile.values, xlab = expression(rho_0),
-ylab = "Negative log-likelihood", type = "l", lwd = 2)
+plot(exp(logrho0.values), profile.values, xlab = expression(rho_0), 
+    ylab = "Negative log-likelihood", type = "l", lwd = 2)
 ```
 
 -   Bivariate profile likelihood
@@ -247,8 +247,8 @@ First choose some parameter values in log scale for the 10 parameters of BiChroM
 ``` r
 # l.0, l.1, m.0, m.1, r.0, r.1, prob.01, prob.10, e.0, e.1
 # input in log-scale
-params <- log(c(0.01, 0.005, 0.01, 0.005, 0.01, 0.01, 0.01, 0.005,
-1e-06, 1e-06))
+params <- log(c(0.01, 0.005, 0.01, 0.005, 0.01, 0.01, 0.01, 0.005, 
+    1e-06, 1e-06))
 # Maximum number of haploid chromosomes
 N <- 25
 ```
@@ -264,8 +264,8 @@ bichrom.model <- Q_bichrom(log.theta = params, size = N)
 # Simulating chromosome number and binary trait change
 # states, root 27 reflects that the simulation starts at the
 # root having binary trait 1 with 1 haploid chromosome number
-res <- chromploid_sim.char(phy = tree, par = bichrom.model, nsim = 1,
-root = 27)
+res <- chromploid_sim.char(phy = tree, par = bichrom.model, nsim = 1, 
+    root = 27)
 ```
 
 Now you have some data.
@@ -279,16 +279,16 @@ The optimization process requires you to assign a probability distribution at th
 ## Uniform distribution of values at the root
 p.0 <- rep(1, 2 * (N + 1))/(2 * (N + 1))
 model.args <- list(size = 25)
-optimization.bichrom <- bichrom_optim(phy.tree = tree, tip.values = res,
-model = "bichrom", model.args = model.args, starting.val = params,
-root.dist = p.0)
+optimization.bichrom <- bichrom_optim(phy.tree = tree, tip.values = res, 
+    model = "bichrom", model.args = model.args, starting.val = params, 
+    root.dist = p.0)
 
-model.args = list(size = 50, equal.param = c("rho0", "rho1"),
-location.par = 5)
+model.args = list(size = 50, equal.param = c("rho0", "rho1"), 
+    location.par = 5)
 
-optimization.reducedbichrom <- bichrom_optim(phy.tree = tree,
-tip.values = res, model = "reducedbichrom", model.args = model.args,
-startin.val = params[-6], root.dist = p.0)
+optimization.reducedbichrom <- bichrom_optim(phy.tree = tree, 
+    tip.values = res, model = "reducedbichrom", model.args = model.args, 
+    startin.val = params[-6], root.dist = p.0)
 ```
 
 Likelihood ratio test
@@ -303,9 +303,9 @@ alpha <- 0.05
 D = 2 * (neglog.red - neglog.full)
 p.value <- pchisq(D, lower.tail = FALSE, df = 1)
 if (p.value < 0.05) {
-reject <- 0
+    reject <- 0
 } else {
-reject <- 1
+    reject <- 1
 }
 ```
 
@@ -327,38 +327,38 @@ The full model of Solanum is defined via a Q-matrix with six parameters. Two pol
 
 ``` r
 Q_solanum <- function(size = 5, log.theta) {
-theta <- exp(log.theta)
-# parameters are in alphabetical order, it holds true for all
-# chromploid functions
-epsilon.0 <- theta[1]
-epsilon.1 <- theta[2]
-rho.0 <- theta[3]
-rho.1 <- theta[4]
-prob.01 <- theta[5]
-prob.10 <- theta[6]
-C = size
-# pure duplications
-Q <- matrix(rep(0, 4 * C * C), nrow = 2 * size)
-for (i in 1:3) {
-Q[i, (i + 2)] <- rho.0
-Q[(5 + i), (i + 7)] <- rho.1
-}
-# demiploidies
-for (i in 1:4) {
-Q[i, (i + 1)] <- epsilon.0
-Q[(5 + i), (i + 6)] <- epsilon.1
-}
-# transitions between binary state
-for (i in 1:5) {
-Q[i, (i + 5)] <- prob.01
-Q[(5 + i), i] <- prob.10
-}
-# diagonal of Q-matrix sums to zero
-diagQ <- apply(Q, 1, sum)
-for (i in 1:10) {
-Q[i, i] <- -diagQ[i]
-}
-return(Q)
+    theta <- exp(log.theta)
+    # parameters are in alphabetical order, it holds true for all
+    # chromploid functions
+    epsilon.0 <- theta[1]
+    epsilon.1 <- theta[2]
+    rho.0 <- theta[3]
+    rho.1 <- theta[4]
+    prob.01 <- theta[5]
+    prob.10 <- theta[6]
+    C = size
+    # pure duplications
+    Q <- matrix(rep(0, 4 * C * C), nrow = 2 * size)
+    for (i in 1:3) {
+        Q[i, (i + 2)] <- rho.0
+        Q[(5 + i), (i + 7)] <- rho.1
+    }
+    # demiploidies
+    for (i in 1:4) {
+        Q[i, (i + 1)] <- epsilon.0
+        Q[(5 + i), (i + 6)] <- epsilon.1
+    }
+    # transitions between binary state
+    for (i in 1:5) {
+        Q[i, (i + 5)] <- prob.01
+        Q[(5 + i), i] <- prob.10
+    }
+    # diagonal of Q-matrix sums to zero
+    diagQ <- apply(Q, 1, sum)
+    for (i in 1:10) {
+        Q[i, i] <- -diagQ[i]
+    }
+    return(Q)
 }
 ```
 
@@ -366,34 +366,34 @@ To defined the Q-matrix for the reduced model where *ρ* = *ρ*<sub>*H*</sub
 
 ``` r
 Q_solanumred <- function(size = 5, log.theta) {
-theta <- exp(log.theta)
-epsilon.0 <- theta[1]
-epsilon.1 <- theta[2]
-rho.0 <- theta[3]
-# these two rhos have the same entry of theta which is size 5
-# instead of 6
-rho.1 <- theta[3]
-prob.01 <- theta[4]
-prob.10 <- theta[5]
-C = size
-Q <- matrix(rep(0, 4 * C * C), nrow = 2 * size)
-for (i in 1:3) {
-Q[i, (i + 2)] <- rho.0
-Q[(5 + i), (i + 7)] <- rho.1
-}
-for (i in 1:4) {
-Q[i, (i + 1)] <- epsilon.0
-Q[(5 + i), (i + 6)] <- epsilon.1
-}
-for (i in 1:5) {
-Q[i, (i + 5)] <- prob.01
-Q[(5 + i), i] <- prob.10
-}
-diagQ <- apply(Q, 1, sum)
-for (i in 1:10) {
-Q[i, i] <- -diagQ[i]
-}
-return(Q)
+    theta <- exp(log.theta)
+    epsilon.0 <- theta[1]
+    epsilon.1 <- theta[2]
+    rho.0 <- theta[3]
+    # these two rhos have the same entry of theta which is size 5
+    # instead of 6
+    rho.1 <- theta[3]
+    prob.01 <- theta[4]
+    prob.10 <- theta[5]
+    C = size
+    Q <- matrix(rep(0, 4 * C * C), nrow = 2 * size)
+    for (i in 1:3) {
+        Q[i, (i + 2)] <- rho.0
+        Q[(5 + i), (i + 7)] <- rho.1
+    }
+    for (i in 1:4) {
+        Q[i, (i + 1)] <- epsilon.0
+        Q[(5 + i), (i + 6)] <- epsilon.1
+    }
+    for (i in 1:5) {
+        Q[i, (i + 5)] <- prob.01
+        Q[(5 + i), i] <- prob.10
+    }
+    diagQ <- apply(Q, 1, sum)
+    for (i in 1:10) {
+        Q[i, i] <- -diagQ[i]
+    }
+    return(Q)
 }
 ```
 
@@ -407,64 +407,64 @@ The optimization process requires you to assign a probability distribution at th
 Here are the steps to optimize the full model
 
 ``` r
-mytree<-read.tree("solanumwoody2.tre")
+mytree<-read.tree("solanumwoody2.tre") 
 mysample<-read.csv("solanumtransformed.csv", header=FALSE)
-#this contains the dataset transformed, the orginal dataset is in solanumsimpledataset.csv
-#5 states for woody and 5 for herbaceous coded 0=Herbaceous 1=woody
-last.state=5
+#this contains the dataset transformed, the orginal dataset is in solanumsimpledataset.csv 
+#5 states for woody and 5 for herbaceous coded 0=Herbaceous 1=woody 
+last.state=5 
 
 #Uniform distribution for root
-p.0<-rep(1,2*(last.state))/(2*(last.state))
+p.0<-rep(1,2*(last.state))/(2*(last.state)) 
 
 #Initial parameter values for optimization (random)
-x.0<-log(c(0.182742343,0.214736895,0.787883643,0.550296163,0.553774817,0.368289079))
+x.0<-log(c(0.182742343,0.214736895,0.787883643,0.550296163,0.553774817,0.368289079)) 
 
 #store results
-resultsfull<-rep(0,8)
+resultsfull<-rep(0,8) 
 # Options used in nloptr, for more information ?nloptr. This
 # is a subplex algorithm, with high tolerance to fine a very
 # precise optimum.
 my.options<-
 list("algorithm"="NLOPT_LN_SBPLX","ftol_rel"=1e-08,"print_level"=1,
-"maxtime"=170000000, "maxeval"=5000)
+     "maxtime"=170000000, "maxeval"=5000) 
 #Full model optimization
 full.model<- nloptr(x0 = x.0, eval_f = chromploid_nllike, opts = my.options,
-phy = mytree, tip.values = mysample, pi.0 =p.0, Q.FUN = Q_solanum,
-Q.ARGS = list(size = 5))
+    phy = mytree, tip.values = mysample, pi.0 =p.0, Q.FUN = Q_solanum,
+Q.ARGS = list(size = 5)) 
 print(full.model)
 resultsfull[1:6]<-mle$solution
-resultsfull[7]<-mle$objective
-resultsfull[8]<-mle$status}
-resultsfull<-as.dataframe(resultsfull)
-names(results)<-
-c("epsilon0","epsilon1","rho0","rho1","q01","q10","nloglike","convergencestatus")
+        resultsfull[7]<-mle$objective
+        resultsfull[8]<-mle$status}
+        resultsfull<-as.dataframe(resultsfull)
+        names(results)<-
+          c("epsilon0","epsilon1","rho0","rho1","q01","q10","nloglike","convergencestatus")
 ```
 
 Now the reduced model optimization works exactly the same but replacing `x.0` for a vector of 5 parameter (because the polyploidy rates are equal), and `Q_solanum` for `Q_solanum_red`.
 
 ``` r
 #Initial parameter values for optimization (random)
-x.0<-log(c(0.626796332,0.889894765,0.78642404,0.786166935,0.634590639))
+x.0<-log(c(0.626796332,0.889894765,0.78642404,0.786166935,0.634590639)) 
 
 #store results
-resultsred<-rep(0,7)
+resultsred<-rep(0,7) 
 # Options used in nloptr, for more information ?nloptr. This
 # is a subplex algorithm, with high tolerance to fine a very
 # precise optimum.
 my.options<-
-list("algorithm"="NLOPT_LN_SBPLX","ftol_rel"=1e-08,"print_level"=1,
-"maxtime"=170000000, "maxeval"=5000)
+  list("algorithm"="NLOPT_LN_SBPLX","ftol_rel"=1e-08,"print_level"=1,
+       "maxtime"=170000000, "maxeval"=5000) 
 #Full model optimization
 reduced.model<- nloptr(x0 = x.0, eval_f = chromploid_nllike, opts = my.options,
-phy = mytree, tip.values = mysample, pi.0 =p.0, Q.FUN = Q_solanum,
-Q.ARGS = list(size = 5))
+    phy = mytree, tip.values = mysample, pi.0 =p.0, Q.FUN = Q_solanum,
+Q.ARGS = list(size = 5)) 
 print(reduced.model)
 resultsred[1:5]<-mle$solution
-resultsred[6]<-mle$objective
-resultsred[7]<-mle$status}
-resultsred<-as.dataframe(resultsred)
-names(resultsred)<-
-c("epsilon0","epsilon1","rho","q01","q10","nloglike","convergencestatus")
+        resultsred[6]<-mle$objective
+        resultsred[7]<-mle$status}
+        resultsred<-as.dataframe(resultsred)
+        names(resultsred)<-
+          c("epsilon0","epsilon1","rho","q01","q10","nloglike","convergencestatus")
 ```
 
 Likelihood ratio test
@@ -479,9 +479,9 @@ alpha <- 0.05
 D = 2 * (neglog.red - neglog.full)
 p.value <- pchisq(D, lower.tail = FALSE, df = 1)
 if (p.value < 0.05) {
-reject <- 0
+    reject <- 0
 } else {
-reject <- 1
+    reject <- 1
 }
 ```
 
