@@ -12,7 +12,7 @@
 
 <meta name="author" content="Rosana Zenil-Ferguson" />
 
-<meta name="date" content="2017-10-09" />
+<meta name="date" content="2018-02-16" />
 
 <title>chromploid Package</title>
 
@@ -70,7 +70,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 <h1 class="title toc-ignore">chromploid Package</h1>
 <h4 class="author"><em>Rosana Zenil-Ferguson</em></h4>
-<h4 class="date"><em>2017-10-09</em></h4>
+<h4 class="date"><em>2018-02-16</em></h4>
 
 
 <div id="TOC">
@@ -83,6 +83,17 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 </ul></li>
 <li><a href="#bichrom-linear">BiChroM Linear</a><ul>
 <li><a href="#usage">Usage</a></li>
+</ul></li>
+<li><a href="#bichrom-example-of-power-analysis">BiChroM example of power analysis</a><ul>
+<li><a href="#equal-chromosome-number-doubling-rate-in-bichrom-simulation">Equal chromosome number doubling rate in BiChroM simulation</a></li>
+<li><a href="#optimization-of-full-and-reduced-models-of-bichom">Optimization of full and reduced models of BiChoM</a></li>
+<li><a href="#likelihood-ratio-test">Likelihood ratio test</a></li>
+</ul></li>
+<li><a href="#example-of-a-custom-chromosome-number-model-in-solanum">Example of a custom chromosome number model in Solanum</a><ul>
+<li><a href="#definition-of-full-and-reduced-models-via-q-matrix">Definition of full and reduced models via Q-matrix</a></li>
+<li><a href="#optimization-of-the-full-and-reduced-models">Optimization of the full and reduced models</a></li>
+<li><a href="#likelihood-ratio-test-1">Likelihood ratio test</a></li>
+<li><a href="#some-more-details">Some more details</a></li>
 </ul></li>
 </ul>
 </div>
@@ -102,7 +113,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <h2>Installation</h2>
 <p>You’ll need package <code>devtools</code>. Chromploid is easily installed from github</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(<span class="st">&quot;devtools&quot;</span>)
-devtools::<span class="kw">install_github</span>(<span class="st">&quot;roszenil/chromploid&quot;</span>)
+devtools<span class="op">::</span><span class="kw">install_github</span>(<span class="st">&quot;roszenil/chromploid&quot;</span>)
 <span class="kw">library</span>(<span class="st">&quot;chromploid&quot;</span>)
 <span class="kw">library</span>(<span class="st">&quot;geiger&quot;</span>) 
 <span class="kw">library</span>(<span class="st">&quot;nloptr&quot;</span>)
@@ -175,14 +186,14 @@ nllike</code></pre></div>
 <span class="co"># x.0 close to the maximum it can take up to 96 hrs.</span>
 
 <span class="kw">library</span>(nloptr)
-x<span class="fl">.0</span> &lt;-<span class="st"> </span><span class="kw">log</span>(<span class="kw">c</span>(<span class="fl">0.12</span>, <span class="fl">0.001</span>, <span class="fl">0.25</span>, <span class="fl">0.002</span>, <span class="fl">0.036</span>, <span class="fl">0.006</span>, <span class="fl">0.04</span>, <span class="fl">0.02</span>, 
+x.<span class="dv">0</span> &lt;-<span class="st"> </span><span class="kw">log</span>(<span class="kw">c</span>(<span class="fl">0.12</span>, <span class="fl">0.001</span>, <span class="fl">0.25</span>, <span class="fl">0.002</span>, <span class="fl">0.036</span>, <span class="fl">0.006</span>, <span class="fl">0.04</span>, <span class="fl">0.02</span>, 
     <span class="fl">1.792317852</span>, <span class="fl">1.57e-14</span>))
 <span class="co"># value where the optimization algorithm is going to start. A</span>
 <span class="co"># vector of 10 values for the parameters in log scale</span>
 
 model.args &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">size =</span> <span class="dv">50</span>)
 optimization.bichrom &lt;-<span class="st"> </span><span class="kw">chromploid_optim</span>(<span class="dt">phy.tree =</span> mytree, <span class="dt">tip.values =</span> mysample, 
-    <span class="dt">model =</span> <span class="st">&quot;bichrom&quot;</span>, <span class="dt">model.args =</span> model.args, <span class="dt">starting.val =</span> x<span class="fl">.0</span>, 
+    <span class="dt">model =</span> <span class="st">&quot;bichrom&quot;</span>, <span class="dt">model.args =</span> model.args, <span class="dt">starting.val =</span> x.<span class="dv">0</span>, 
     <span class="dt">root.dist =</span> <span class="ot">NULL</span>)
 
 <span class="kw">print</span>(optimization.bichrom)</code></pre></div>
@@ -190,7 +201,7 @@ optimization.bichrom &lt;-<span class="st"> </span><span class="kw">chromploid_o
 <ol start="4" style="list-style-type: decimal">
 <li>Likelihood Ratio Test To calculate the likelihood of the reduced model needed for likelihood ratio tests you can use the function <code>chromploid_nllike</code> with Q-matrix <code>Q_reducedbichrom</code> or use the wrapper optimization function <code>chromploid_optim</code>. The example here tests if the rates associated with chromosome doubling under the different values of the binary trait are equal that is <span class="math inline">\(H_0:\rho= \rho_0=\rho_1\)</span></li>
 </ol>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">x<span class="fl">.0</span> &lt;-<span class="st"> </span><span class="kw">log</span>(<span class="kw">c</span>(<span class="fl">0.12</span>, <span class="fl">0.001</span>, <span class="fl">0.25</span>, <span class="fl">0.002</span>, <span class="fl">0.01</span>, <span class="fl">0.04</span>, <span class="fl">0.02</span>, <span class="fl">1.792317852</span>, 
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">x.<span class="dv">0</span> &lt;-<span class="st"> </span><span class="kw">log</span>(<span class="kw">c</span>(<span class="fl">0.12</span>, <span class="fl">0.001</span>, <span class="fl">0.25</span>, <span class="fl">0.002</span>, <span class="fl">0.01</span>, <span class="fl">0.04</span>, <span class="fl">0.02</span>, <span class="fl">1.792317852</span>, 
     <span class="fl">1.57e-14</span>))
 <span class="co"># Value where the optimization algorithm is going to start. A</span>
 <span class="co"># vector of 9 values for the parameters in log scale. The</span>
@@ -207,18 +218,18 @@ model.args =<span class="st"> </span><span class="kw">list</span>(<span class="d
 
 optimization.reducedbichrom &lt;-<span class="st"> </span><span class="kw">chromploid_optim</span>(<span class="dt">phy.tree =</span> mytree, 
     <span class="dt">tip.values =</span> mysample, <span class="dt">model =</span> <span class="st">&quot;reducedbichrom&quot;</span>, <span class="dt">model.args =</span> model.args, 
-    <span class="dt">starting.val =</span> x<span class="fl">.0</span>, <span class="dt">root.dist =</span> <span class="ot">NULL</span>)</code></pre></div>
+    <span class="dt">starting.val =</span> x.<span class="dv">0</span>, <span class="dt">root.dist =</span> <span class="ot">NULL</span>)</code></pre></div>
 <p>The vector <code>optimization.reducedbicrhom</code> contains in the first 9 entries maximum likelihood estimates of parameters <span class="math inline">\((\lambda_0,\lambda_1, \mu_0,\mu_1,\rho,q_{01},q_{10},\epsilon_0,\epsilon_1)\)</span>. Then the negative log likelihood value at the MLE, and finally the status of the convergence to the optimum inherited from package nloptr.</p>
 <p>print(optimization.reducedbichrom) ```</p>
 <p>Finally the value of the likelihood ratio test for <span class="math inline">\(H_0: \rho_0=\rho_1\)</span> hypothesis is simply <span class="math inline">\(D=2\times (\textrm{reduced bichrom nloglike}- \textrm{full model nloglike})\)</span> that has a <span class="math inline">\(\chi^2_{(1)}\)</span> distribution</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">neglog.red &lt;-<span class="st"> </span>optimization.reducedbichrom[<span class="dv">10</span>]
 neglog.full &lt;-<span class="st"> </span>optimization.bichrom[<span class="dv">11</span>]
 alpha &lt;-<span class="st"> </span><span class="fl">0.05</span>
-D =<span class="st"> </span><span class="dv">2</span> *<span class="st"> </span>(neglog.red -<span class="st"> </span>neglog.full)
+D =<span class="st"> </span><span class="dv">2</span> <span class="op">*</span><span class="st"> </span>(neglog.red <span class="op">-</span><span class="st"> </span>neglog.full)
 p.value &lt;-<span class="st"> </span><span class="kw">pchisq</span>(D, <span class="dt">lower.tail =</span> <span class="ot">FALSE</span>, <span class="dt">df =</span> <span class="dv">1</span>)
-if (p.value &gt;<span class="st"> </span><span class="fl">0.05</span>) {
+<span class="cf">if</span> (p.value <span class="op">&gt;</span><span class="st"> </span><span class="fl">0.05</span>) {
     reject &lt;-<span class="st"> </span><span class="dv">0</span>
-} else {
+} <span class="cf">else</span> {
     reject &lt;-<span class="st"> </span><span class="dv">1</span>
 }</code></pre></div>
 <ol start="5" style="list-style-type: decimal">
@@ -233,7 +244,7 @@ if (p.value &gt;<span class="st"> </span><span class="fl">0.05</span>) {
 <span class="co"># 0.035, 0.04 (in log scale). True value is around 0.36 so</span>
 <span class="co"># values surrounding the true value are interesting</span>
 long &lt;-<span class="st"> </span><span class="kw">length</span>(logrho0.values)
-x<span class="fl">.0</span> &lt;-<span class="st"> </span><span class="kw">log</span>(<span class="kw">c</span>(<span class="fl">0.12</span>, <span class="fl">0.001</span>, <span class="fl">0.25</span>, <span class="fl">0.002</span>, <span class="fl">0.006</span>, <span class="fl">0.04</span>, <span class="fl">0.02</span>, <span class="fl">1.792317852</span>, 
+x.<span class="dv">0</span> &lt;-<span class="st"> </span><span class="kw">log</span>(<span class="kw">c</span>(<span class="fl">0.12</span>, <span class="fl">0.001</span>, <span class="fl">0.25</span>, <span class="fl">0.002</span>, <span class="fl">0.006</span>, <span class="fl">0.04</span>, <span class="fl">0.02</span>, <span class="fl">1.792317852</span>, 
     <span class="fl">1.57e-14</span>))
 <span class="co"># value where the optimization algorithm is going to start. A</span>
 <span class="co"># vector of 9 values for the nuisance parameters in log scale</span>
@@ -244,8 +255,8 @@ my.options &lt;-<span class="st"> </span><span class="kw">list</span>(<span clas
 <span class="co"># Options used in nloptr, for more information ?nloptr. This</span>
 <span class="co"># is a subplex algorithm, with high tolerance to fine a very</span>
 <span class="co"># precise optimum.</span>
-for (i in <span class="dv">1</span>:long) {
-    mle.profilerho0 &lt;-<span class="st"> </span><span class="kw">nloptr</span>(<span class="dt">x0 =</span> x<span class="fl">.0</span>, <span class="dt">eval_f =</span> chromploid_nllike, 
+<span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span>long) {
+    mle.profilerho0 &lt;-<span class="st"> </span><span class="kw">nloptr</span>(<span class="dt">x0 =</span> x.<span class="dv">0</span>, <span class="dt">eval_f =</span> chromploid_nllike, 
         <span class="dt">opts =</span> my.options, <span class="dt">phy =</span> mytree, <span class="dt">tip.values =</span> mysample, 
         <span class="dt">pi.0 =</span> <span class="ot">NULL</span>, <span class="dt">Q.FUN =</span> Q_unibichrom, <span class="dt">Q.ARGS =</span> <span class="kw">list</span>(<span class="dt">log.theta0 =</span> logrho0.values[i], 
             <span class="dt">size =</span> <span class="dv">50</span>, <span class="dt">param.name =</span> <span class="st">&quot;rho0&quot;</span>))
@@ -253,10 +264,10 @@ for (i in <span class="dv">1</span>:long) {
     <span class="co"># Q_unibichrom Type ?Q_unibichrom to see a longer explanation</span>
     <span class="co"># of each argument</span>
     <span class="kw">print</span>(mle.profilerho0)
-    profile.values[i] &lt;-<span class="st"> </span>mle.profilerho0$objective
+    profile.values[i] &lt;-<span class="st"> </span>mle.profilerho0<span class="op">$</span>objective
 }
 
-<span class="kw">plot</span>(<span class="kw">exp</span>(logrho0.values), profile.values, <span class="dt">xlab =</span> <span class="kw">expression</span>(rho_0), 
+<span class="kw">plot</span>(<span class="kw">exp</span>(logrho0.values), profile.values, <span class="dt">xlab =</span> <span class="kw">expression</span>(rho_<span class="dv">0</span>), 
     <span class="dt">ylab =</span> <span class="st">&quot;Negative log-likelihood&quot;</span>, <span class="dt">type =</span> <span class="st">&quot;l&quot;</span>, <span class="dt">lwd =</span> <span class="dv">2</span>)</code></pre></div>
 <ul>
 <li>Bivariate profile likelihood</li>
@@ -274,6 +285,250 @@ for (i in <span class="dv">1</span>:long) {
 <div id="usage" class="section level3">
 <h3>Usage</h3>
 <p>Substitute <code>Q_bichrom()</code> for <code>Q_bichromlinear()</code> but the arguments for this new function are a vector log.par of size 12, with parameters <span class="math inline">\(\lambda_0, \lambda_1, \mu_0,\mu_1,\rho_0,\rho_1, \kappa_0, \kappa_1, q_{01},q_{10},\epsilon_0,\epsilon_1\)</span> in this order and in log-scale, and <code>size</code> the maximum number of haploid chromosome numbers allowed.</p>
+</div>
+</div>
+<div id="bichrom-example-of-power-analysis" class="section level1">
+<h1>BiChroM example of power analysis</h1>
+<p>Libraries needed for the simulation example</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(<span class="st">&quot;geiger&quot;</span>)
+<span class="kw">library</span>(<span class="st">&quot;chromploid&quot;</span>)</code></pre></div>
+<div id="equal-chromosome-number-doubling-rate-in-bichrom-simulation" class="section level2">
+<h2>Equal chromosome number doubling rate in BiChroM simulation</h2>
+<p>First choose some parameter values in log scale for the 10 parameters of BiChroM and the maximum number of haploid chromosomes to build the Q-matrix.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># l.0, l.1, m.0, m.1, r.0, r.1, prob.01, prob.10, e.0, e.1</span>
+<span class="co"># input in log-scale</span>
+params &lt;-<span class="st"> </span><span class="kw">log</span>(<span class="kw">c</span>(<span class="fl">0.01</span>, <span class="fl">0.005</span>, <span class="fl">0.01</span>, <span class="fl">0.005</span>, <span class="fl">0.01</span>, <span class="fl">0.01</span>, <span class="fl">0.01</span>, <span class="fl">0.005</span>, 
+    <span class="fl">1e-06</span>, <span class="fl">1e-06</span>))
+<span class="co"># Maximum number of haploid chromosomes</span>
+N &lt;-<span class="st"> </span><span class="dv">25</span></code></pre></div>
+<p>Then, simulate a phylogeny with 250 tips and BiChroM process on top of it</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># simulating a phylogeny with 250 tips (birth process)</span>
+tree &lt;-<span class="st"> </span><span class="kw">sim.bdtree</span>(<span class="dt">b =</span> <span class="fl">0.03</span>, <span class="dt">stop =</span> <span class="st">&quot;taxa&quot;</span>, <span class="dt">n =</span> <span class="dv">250</span>)  <span class="co"># Approximatedly 110 million years</span>
+
+<span class="co"># Bichrom.model defined via Q-matrix</span>
+bichrom.model &lt;-<span class="st"> </span><span class="kw">Q_bichrom</span>(<span class="dt">log.theta =</span> params, <span class="dt">size =</span> N)
+<span class="co"># Simulating chromosome number and binary trait change</span>
+<span class="co"># states, root 27 reflects that the simulation starts at the</span>
+<span class="co"># root having binary trait 1 with 1 haploid chromosome number</span>
+res &lt;-<span class="st"> </span><span class="kw">chromploid_sim.char</span>(<span class="dt">phy =</span> tree, <span class="dt">par =</span> bichrom.model, <span class="dt">nsim =</span> <span class="dv">1</span>, 
+    <span class="dt">root =</span> <span class="dv">27</span>)</code></pre></div>
+<p>Now you have some data.</p>
+</div>
+<div id="optimization-of-full-and-reduced-models-of-bichom" class="section level2">
+<h2>Optimization of full and reduced models of BiChoM</h2>
+<p>The optimization process requires you to assign a probability distribution at the root of the tree. In this example is uniform (we really don’t know the chromosome number or binary trait at the root). Then, you can use a wrapper function like <code>bichrom_optim</code> to optimize full and reduced BiChroM models with the data you just generated. If you are interested in optimizing your own model you can just follow what is inside this function but with your own custom Q-matrix (see solanum example).</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## Uniform distribution of values at the root
+p.<span class="dv">0</span> &lt;-<span class="st"> </span><span class="kw">rep</span>(<span class="dv">1</span>, <span class="dv">2</span> <span class="op">*</span><span class="st"> </span>(N <span class="op">+</span><span class="st"> </span><span class="dv">1</span>))<span class="op">/</span>(<span class="dv">2</span> <span class="op">*</span><span class="st"> </span>(N <span class="op">+</span><span class="st"> </span><span class="dv">1</span>))
+model.args &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">size =</span> <span class="dv">25</span>)
+optimization.bichrom &lt;-<span class="st"> </span><span class="kw">bichrom_optim</span>(<span class="dt">phy.tree =</span> tree, <span class="dt">tip.values =</span> res, 
+    <span class="dt">model =</span> <span class="st">&quot;bichrom&quot;</span>, <span class="dt">model.args =</span> model.args, <span class="dt">starting.val =</span> params, 
+    <span class="dt">root.dist =</span> p.<span class="dv">0</span>)
+
+model.args =<span class="st"> </span><span class="kw">list</span>(<span class="dt">size =</span> <span class="dv">50</span>, <span class="dt">equal.param =</span> <span class="kw">c</span>(<span class="st">&quot;rho0&quot;</span>, <span class="st">&quot;rho1&quot;</span>), 
+    <span class="dt">location.par =</span> <span class="dv">5</span>)
+
+optimization.reducedbichrom &lt;-<span class="st"> </span><span class="kw">bichrom_optim</span>(<span class="dt">phy.tree =</span> tree, 
+    <span class="dt">tip.values =</span> res, <span class="dt">model =</span> <span class="st">&quot;reducedbichrom&quot;</span>, <span class="dt">model.args =</span> model.args, 
+    <span class="dt">startin.val =</span> params[<span class="op">-</span><span class="dv">6</span>], <span class="dt">root.dist =</span> p.<span class="dv">0</span>)</code></pre></div>
+</div>
+<div id="likelihood-ratio-test" class="section level2">
+<h2>Likelihood ratio test</h2>
+<p>Since you already calculated the negative log-likelihoods using <code>bichrom_optim</code> function you only need to calculate statistic <code>D</code> and the p-value as follows.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">neglog.red &lt;-<span class="st"> </span>optimization.reducedbichrom<span class="op">$</span>nloglike
+neglog.full &lt;-<span class="st"> </span>optimization.bichrom<span class="op">$</span>nloglike
+alpha &lt;-<span class="st"> </span><span class="fl">0.05</span>
+D =<span class="st"> </span><span class="dv">2</span> <span class="op">*</span><span class="st"> </span>(neglog.red <span class="op">-</span><span class="st"> </span>neglog.full)
+p.value &lt;-<span class="st"> </span><span class="kw">pchisq</span>(D, <span class="dt">lower.tail =</span> <span class="ot">FALSE</span>, <span class="dt">df =</span> <span class="dv">1</span>)
+<span class="cf">if</span> (p.value <span class="op">&lt;</span><span class="st"> </span><span class="fl">0.05</span>) {
+    reject &lt;-<span class="st"> </span><span class="dv">0</span>
+} <span class="cf">else</span> {
+    reject &lt;-<span class="st"> </span><span class="dv">1</span>
+}</code></pre></div>
+</div>
+</div>
+<div id="example-of-a-custom-chromosome-number-model-in-solanum" class="section level1">
+<h1>Example of a custom chromosome number model in Solanum</h1>
+<p>Libraries needed for the Solanum example</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(<span class="st">&quot;geiger&quot;</span>)
+<span class="kw">library</span>(<span class="st">&quot;nloptr&quot;</span>)
+<span class="kw">library</span>(<span class="st">&quot;chromploid&quot;</span>)</code></pre></div>
+<div id="definition-of-full-and-reduced-models-via-q-matrix" class="section level2">
+<h2>Definition of full and reduced models via Q-matrix</h2>
+<p>The full model of Solanum is defined via a Q-matrix with six parameters. Two polyploidy rates <span class="math inline">\((\rho_H, \rho_W)\)</span>, two demiploidy rates <span class="math inline">\((\epsilon_H,\epsilon_W)\)</span>, and two transition rates between binary traits <span class="math inline">\((q_{HW},q_{WH})\)</span>. The model has 5 states for herbaceous and 5 states for woody because chromosome numbers in the sample aree 12, 18, 24, 36, and 48. The Q-matrix is simply defined as follows:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">Q_solanum &lt;-<span class="st"> </span><span class="cf">function</span>(<span class="dt">size =</span> <span class="dv">5</span>, log.theta) {
+    theta &lt;-<span class="st"> </span><span class="kw">exp</span>(log.theta)
+    <span class="co"># parameters are in alphabetical order, it holds true for all</span>
+    <span class="co"># chromploid functions</span>
+    epsilon.<span class="dv">0</span> &lt;-<span class="st"> </span>theta[<span class="dv">1</span>]
+    epsilon.<span class="dv">1</span> &lt;-<span class="st"> </span>theta[<span class="dv">2</span>]
+    rho.<span class="dv">0</span> &lt;-<span class="st"> </span>theta[<span class="dv">3</span>]
+    rho.<span class="dv">1</span> &lt;-<span class="st"> </span>theta[<span class="dv">4</span>]
+    prob.<span class="dv">01</span> &lt;-<span class="st"> </span>theta[<span class="dv">5</span>]
+    prob.<span class="dv">10</span> &lt;-<span class="st"> </span>theta[<span class="dv">6</span>]
+    C =<span class="st"> </span>size
+    <span class="co"># pure duplications</span>
+    Q &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="kw">rep</span>(<span class="dv">0</span>, <span class="dv">4</span> <span class="op">*</span><span class="st"> </span>C <span class="op">*</span><span class="st"> </span>C), <span class="dt">nrow =</span> <span class="dv">2</span> <span class="op">*</span><span class="st"> </span>size)
+    <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="dv">3</span>) {
+        Q[i, (i <span class="op">+</span><span class="st"> </span><span class="dv">2</span>)] &lt;-<span class="st"> </span>rho.<span class="dv">0</span>
+        Q[(<span class="dv">5</span> <span class="op">+</span><span class="st"> </span>i), (i <span class="op">+</span><span class="st"> </span><span class="dv">7</span>)] &lt;-<span class="st"> </span>rho.<span class="dv">1</span>
+    }
+    <span class="co"># demiploidies</span>
+    <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="dv">4</span>) {
+        Q[i, (i <span class="op">+</span><span class="st"> </span><span class="dv">1</span>)] &lt;-<span class="st"> </span>epsilon.<span class="dv">0</span>
+        Q[(<span class="dv">5</span> <span class="op">+</span><span class="st"> </span>i), (i <span class="op">+</span><span class="st"> </span><span class="dv">6</span>)] &lt;-<span class="st"> </span>epsilon.<span class="dv">1</span>
+    }
+    <span class="co"># transitions between binary state</span>
+    <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="dv">5</span>) {
+        Q[i, (i <span class="op">+</span><span class="st"> </span><span class="dv">5</span>)] &lt;-<span class="st"> </span>prob.<span class="dv">01</span>
+        Q[(<span class="dv">5</span> <span class="op">+</span><span class="st"> </span>i), i] &lt;-<span class="st"> </span>prob.<span class="dv">10</span>
+    }
+    <span class="co"># diagonal of Q-matrix sums to zero</span>
+    diagQ &lt;-<span class="st"> </span><span class="kw">apply</span>(Q, <span class="dv">1</span>, sum)
+    <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="dv">10</span>) {
+        Q[i, i] &lt;-<span class="st"> </span><span class="op">-</span>diagQ[i]
+    }
+    <span class="kw">return</span>(Q)
+}</code></pre></div>
+<p>To defined the Q-matrix for the reduced model where <span class="math inline">\(\rho=\rho_H=\rho_W\)</span> we do exactly the same as before but we equal the vector entry number 3 to the two parameters, that is</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">Q_solanumred &lt;-<span class="st"> </span><span class="cf">function</span>(<span class="dt">size =</span> <span class="dv">5</span>, log.theta) {
+    theta &lt;-<span class="st"> </span><span class="kw">exp</span>(log.theta)
+    epsilon.<span class="dv">0</span> &lt;-<span class="st"> </span>theta[<span class="dv">1</span>]
+    epsilon.<span class="dv">1</span> &lt;-<span class="st"> </span>theta[<span class="dv">2</span>]
+    rho.<span class="dv">0</span> &lt;-<span class="st"> </span>theta[<span class="dv">3</span>]
+    <span class="co"># these two rhos have the same entry of theta which is size 5</span>
+    <span class="co"># instead of 6</span>
+    rho.<span class="dv">1</span> &lt;-<span class="st"> </span>theta[<span class="dv">3</span>]
+    prob.<span class="dv">01</span> &lt;-<span class="st"> </span>theta[<span class="dv">4</span>]
+    prob.<span class="dv">10</span> &lt;-<span class="st"> </span>theta[<span class="dv">5</span>]
+    C =<span class="st"> </span>size
+    Q &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="kw">rep</span>(<span class="dv">0</span>, <span class="dv">4</span> <span class="op">*</span><span class="st"> </span>C <span class="op">*</span><span class="st"> </span>C), <span class="dt">nrow =</span> <span class="dv">2</span> <span class="op">*</span><span class="st"> </span>size)
+    <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="dv">3</span>) {
+        Q[i, (i <span class="op">+</span><span class="st"> </span><span class="dv">2</span>)] &lt;-<span class="st"> </span>rho.<span class="dv">0</span>
+        Q[(<span class="dv">5</span> <span class="op">+</span><span class="st"> </span>i), (i <span class="op">+</span><span class="st"> </span><span class="dv">7</span>)] &lt;-<span class="st"> </span>rho.<span class="dv">1</span>
+    }
+    <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="dv">4</span>) {
+        Q[i, (i <span class="op">+</span><span class="st"> </span><span class="dv">1</span>)] &lt;-<span class="st"> </span>epsilon.<span class="dv">0</span>
+        Q[(<span class="dv">5</span> <span class="op">+</span><span class="st"> </span>i), (i <span class="op">+</span><span class="st"> </span><span class="dv">6</span>)] &lt;-<span class="st"> </span>epsilon.<span class="dv">1</span>
+    }
+    <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="dv">5</span>) {
+        Q[i, (i <span class="op">+</span><span class="st"> </span><span class="dv">5</span>)] &lt;-<span class="st"> </span>prob.<span class="dv">01</span>
+        Q[(<span class="dv">5</span> <span class="op">+</span><span class="st"> </span>i), i] &lt;-<span class="st"> </span>prob.<span class="dv">10</span>
+    }
+    diagQ &lt;-<span class="st"> </span><span class="kw">apply</span>(Q, <span class="dv">1</span>, sum)
+    <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="dv">10</span>) {
+        Q[i, i] &lt;-<span class="st"> </span><span class="op">-</span>diagQ[i]
+    }
+    <span class="kw">return</span>(Q)
+}</code></pre></div>
+<p>Those are the only two definitions needed for chromploid to perform a likelihood ratio test.</p>
+</div>
+<div id="optimization-of-the-full-and-reduced-models" class="section level2">
+<h2>Optimization of the full and reduced models</h2>
+<p>The optimization process requires you to assign a probability distribution at the root of the tree. In this example is uniform (we really don’t know the chromosome number or binary trait at the root). We also use some starting values in the optimization called <code>x.0</code>.</p>
+<p>Here are the steps to optimize the full model</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">mytree&lt;-<span class="kw">read.tree</span>(<span class="st">&quot;solanumwoody2.tre&quot;</span>) 
+mysample&lt;-<span class="kw">read.csv</span>(<span class="st">&quot;solanumtransformed.csv&quot;</span>, <span class="dt">header=</span><span class="ot">FALSE</span>)
+<span class="co">#this contains the dataset transformed, the orginal dataset is in solanumsimpledataset.csv </span>
+<span class="co">#5 states for woody and 5 for herbaceous coded 0=Herbaceous 1=woody </span>
+last.state=<span class="dv">5</span> 
+
+<span class="co">#Uniform distribution for root</span>
+p.<span class="dv">0</span>&lt;-<span class="kw">rep</span>(<span class="dv">1</span>,<span class="dv">2</span><span class="op">*</span>(last.state))<span class="op">/</span>(<span class="dv">2</span><span class="op">*</span>(last.state)) 
+
+<span class="co">#Initial parameter values for optimization (random)</span>
+x.<span class="dv">0</span>&lt;-<span class="kw">log</span>(<span class="kw">c</span>(<span class="fl">0.182742343</span>,<span class="fl">0.214736895</span>,<span class="fl">0.787883643</span>,<span class="fl">0.550296163</span>,<span class="fl">0.553774817</span>,<span class="fl">0.368289079</span>)) 
+
+<span class="co">#store results</span>
+resultsfull&lt;-<span class="kw">rep</span>(<span class="dv">0</span>,<span class="dv">8</span>) 
+<span class="co"># Options used in nloptr, for more information ?nloptr. This</span>
+<span class="co"># is a subplex algorithm, with high tolerance to fine a very</span>
+<span class="co"># precise optimum.</span>
+my.options&lt;-
+<span class="kw">list</span>(<span class="st">&quot;algorithm&quot;</span>=<span class="st">&quot;NLOPT_LN_SBPLX&quot;</span>,<span class="st">&quot;ftol_rel&quot;</span>=<span class="fl">1e-08</span>,<span class="st">&quot;print_level&quot;</span>=<span class="dv">1</span>,
+     <span class="st">&quot;maxtime&quot;</span>=<span class="dv">170000000</span>, <span class="st">&quot;maxeval&quot;</span>=<span class="dv">5000</span>) 
+<span class="co">#Full model optimization</span>
+full.model&lt;-<span class="st"> </span><span class="kw">nloptr</span>(<span class="dt">x0 =</span> x.<span class="dv">0</span>, <span class="dt">eval_f =</span> chromploid_nllike, <span class="dt">opts =</span> my.options,
+    <span class="dt">phy =</span> mytree, <span class="dt">tip.values =</span> mysample, <span class="dt">pi.0 =</span>p.<span class="dv">0</span>, <span class="dt">Q.FUN =</span> Q_solanum,
+<span class="dt">Q.ARGS =</span> <span class="kw">list</span>(<span class="dt">size =</span> <span class="dv">5</span>)) 
+<span class="kw">print</span>(full.model)
+resultsfull[<span class="dv">1</span><span class="op">:</span><span class="dv">6</span>]&lt;-mle<span class="op">$</span>solution
+        resultsfull[<span class="dv">7</span>]&lt;-mle<span class="op">$</span>objective
+        resultsfull[<span class="dv">8</span>]&lt;-mle<span class="op">$</span>status<span class="er">}</span>
+        resultsfull&lt;-<span class="kw">as.dataframe</span>(resultsfull)
+        <span class="kw">names</span>(results)&lt;-
+<span class="st">          </span><span class="kw">c</span>(<span class="st">&quot;epsilon0&quot;</span>,<span class="st">&quot;epsilon1&quot;</span>,<span class="st">&quot;rho0&quot;</span>,<span class="st">&quot;rho1&quot;</span>,<span class="st">&quot;q01&quot;</span>,<span class="st">&quot;q10&quot;</span>,<span class="st">&quot;nloglike&quot;</span>,<span class="st">&quot;convergencestatus&quot;</span>)</code></pre></div>
+<p>Now the reduced model optimization works exactly the same but replacing <code>x.0</code> for a vector of 5 parameter (because the polyploidy rates are equal), and <code>Q_solanum</code> for <code>Q_solanum_red</code>.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#Initial parameter values for optimization (random)</span>
+x.<span class="dv">0</span>&lt;-<span class="kw">log</span>(<span class="kw">c</span>(<span class="fl">0.626796332</span>,<span class="fl">0.889894765</span>,<span class="fl">0.78642404</span>,<span class="fl">0.786166935</span>,<span class="fl">0.634590639</span>)) 
+
+<span class="co">#store results</span>
+resultsred&lt;-<span class="kw">rep</span>(<span class="dv">0</span>,<span class="dv">7</span>) 
+<span class="co"># Options used in nloptr, for more information ?nloptr. This</span>
+<span class="co"># is a subplex algorithm, with high tolerance to fine a very</span>
+<span class="co"># precise optimum.</span>
+my.options&lt;-
+<span class="st">  </span><span class="kw">list</span>(<span class="st">&quot;algorithm&quot;</span>=<span class="st">&quot;NLOPT_LN_SBPLX&quot;</span>,<span class="st">&quot;ftol_rel&quot;</span>=<span class="fl">1e-08</span>,<span class="st">&quot;print_level&quot;</span>=<span class="dv">1</span>,
+       <span class="st">&quot;maxtime&quot;</span>=<span class="dv">170000000</span>, <span class="st">&quot;maxeval&quot;</span>=<span class="dv">5000</span>) 
+<span class="co">#Full model optimization</span>
+reduced.model&lt;-<span class="st"> </span><span class="kw">nloptr</span>(<span class="dt">x0 =</span> x.<span class="dv">0</span>, <span class="dt">eval_f =</span> chromploid_nllike, <span class="dt">opts =</span> my.options,
+    <span class="dt">phy =</span> mytree, <span class="dt">tip.values =</span> mysample, <span class="dt">pi.0 =</span>p.<span class="dv">0</span>, <span class="dt">Q.FUN =</span> Q_solanum,
+<span class="dt">Q.ARGS =</span> <span class="kw">list</span>(<span class="dt">size =</span> <span class="dv">5</span>)) 
+<span class="kw">print</span>(reduced.model)
+resultsred[<span class="dv">1</span><span class="op">:</span><span class="dv">5</span>]&lt;-mle<span class="op">$</span>solution
+        resultsred[<span class="dv">6</span>]&lt;-mle<span class="op">$</span>objective
+        resultsred[<span class="dv">7</span>]&lt;-mle<span class="op">$</span>status<span class="er">}</span>
+        resultsred&lt;-<span class="kw">as.dataframe</span>(resultsred)
+        <span class="kw">names</span>(resultsred)&lt;-
+<span class="st">          </span><span class="kw">c</span>(<span class="st">&quot;epsilon0&quot;</span>,<span class="st">&quot;epsilon1&quot;</span>,<span class="st">&quot;rho&quot;</span>,<span class="st">&quot;q01&quot;</span>,<span class="st">&quot;q10&quot;</span>,<span class="st">&quot;nloglike&quot;</span>,<span class="st">&quot;convergencestatus&quot;</span>)</code></pre></div>
+</div>
+<div id="likelihood-ratio-test-1" class="section level2">
+<h2>Likelihood ratio test</h2>
+<p>Since you already calculated the negative log-likelihoods using <code>nloptr</code> in <code>chromploid_nllike</code> function you only need to calculate statistic <code>D</code> and the p-value as follows.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">neglog.red &lt;-<span class="st"> </span>resultsred<span class="op">$</span>nloglike
+neglog.full &lt;-<span class="st"> </span>resultsfull<span class="op">$</span>nloglike
+alpha &lt;-<span class="st"> </span><span class="fl">0.05</span>
+D =<span class="st"> </span><span class="dv">2</span> <span class="op">*</span><span class="st"> </span>(neglog.red <span class="op">-</span><span class="st"> </span>neglog.full)
+p.value &lt;-<span class="st"> </span><span class="kw">pchisq</span>(D, <span class="dt">lower.tail =</span> <span class="ot">FALSE</span>, <span class="dt">df =</span> <span class="dv">1</span>)
+<span class="cf">if</span> (p.value <span class="op">&lt;</span><span class="st"> </span><span class="fl">0.05</span>) {
+    reject &lt;-<span class="st"> </span><span class="dv">0</span>
+} <span class="cf">else</span> {
+    reject &lt;-<span class="st"> </span><span class="dv">1</span>
+}</code></pre></div>
+</div>
+<div id="some-more-details" class="section level2">
+<h2>Some more details</h2>
+<p>The dataset has chromosome numbers ranging from 12 to 48. To make this models work and not having to specify really large matrices with lots of zeros it is important to recode the original dataset into 10 states as follows:</p>
+<table>
+<thead>
+<tr class="header">
+<th>Herbaceous Csomes</th>
+<th>Woody Csomes</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>12=1</td>
+<td>12=6</td>
+</tr>
+<tr class="even">
+<td>18=2</td>
+<td>18=7</td>
+</tr>
+<tr class="odd">
+<td>24=3</td>
+<td>24=8</td>
+</tr>
+<tr class="even">
+<td>36=4</td>
+<td>18=9</td>
+</tr>
+<tr class="odd">
+<td>36=5</td>
+<td>18=10</td>
+</tr>
+</tbody>
+</table>
+<p>And those are the 10 states used by <code>Q_solanum</code> and what you would find in the transformed dataset.</p>
 </div>
 </div>
 <div class="footnotes">
