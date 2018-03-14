@@ -7,7 +7,7 @@
 Q_chromevolM3(log.theta, size)
 }
 \arguments{
-\item{log.theta}{vector of size 4 indicating parameters in ln scale for chromevol M3 the order of the parameters is (lambda, mu, rho, delta)}
+\item{log.theta}{vector of size 4 indicating parameters in ln scale for chromevol M3 the order of the parameters is (lambda,delta, rho, mu) (in that order, lambda=+1, delta=-1, rho=x2, mu=x1.5)}
 
 \item{size}{Maximum number of chromosomes in the sample (recommended no more than 40)}
 }

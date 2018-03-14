@@ -20,5 +20,5 @@ Q_reducedbichrom(log.pars, size, equal.param = c("rho0", "rho1"),
 Calculates a Q matrix for reduced BiChroM model
 }
 \details{
-This function assumes that two parameter values are equal. This is useful for calculating likelihood ratio tests in BiChrom. By default the two parameters assumed equal are "rho0"="rho1" but user can specify which two parameters are the same
+This function assumes that two parameter values are equal. This is useful for calculating likelihood ratio tests in BiChrom. For now the only test that can be performed is when chromosome doubling parameters are assumed  as "rho0"="rho1" (very soon for any two comparisons)
 }
