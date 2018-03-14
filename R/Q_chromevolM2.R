@@ -1,0 +1,41 @@
+#' Calculates Q-matrix for chromevol M2 model (beta version)
+#' @details Q_chomevolM3 determines the Q-matrix for a model of chromosome number change with duplications, dysploidy, and  demiploidy.
+#'
+#' @param log.theta vector of size 3 indicating parameters in ln scale for chromevol M3 the order of the parameters is (lambda,delta, rho)(in that order, lambda=+1, delta=-1, rho=x2)
+#' @param size Maximum number of chromosomes in the sample (recommended no more than 40)
+#' @return Q a sparse matrix of size (size+10)
+#' @export
+Q_chromevolM2<-function (log.theta, size) 
+{
+  theta <- exp(log.theta)
+  l.0 <- theta[1]
+  d.0 <- theta[2]
+  r.0 <- theta[3]
+  
+  C <- size + 10
+  Q <- rep(0, C * C)
+  Q <- matrix(Q, ncol = C)
+  Q[1, 1] <- -(l.0 + r.0)
+  Q[1, 2] <- l.0 + r.0
+  aux1 <- floor((C - 1)/2)
+  for (i in 2:aux1) {
+    Q[i, i] <- -(l.0 + r.0  + d.0)
+    Q[i, (i - 1)] <- d.0
+    Q[i, (i + 1)] <- l.0
+    Q[i, (2 * i)] <- r.0
+    
+  }
+  for (i in (aux1 + 1):(C - 2)) {
+    Q[i, i] <- -(l.0 + r.0  + d.0)
+    Q[i, (i - 1)] <- d.0
+    Q[i, (i + 1)] <- l.0
+    Q[i, C] <- r.0
+    
+  }
+  Q[C - 1, C - 2] <- d.0
+  Q[C - 1, C - 1] <- -(l.0 + r.0 + d.0)
+  Q[C - 1, C] <- l.0  + r.0
+  Q[C, (C - 1)] <- d.0
+  Q[C, C] <- -d.0
+  return(Q)
+}
